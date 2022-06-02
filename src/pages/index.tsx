@@ -9,6 +9,7 @@ import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import Header from '../components/Header';
 
 interface Post {
   uid?: string;
@@ -47,48 +48,52 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
   }
 
   return (
-    <div className="center inline-gutters-16 stack-64">
-      <ul className="stack-48">
-        {posts.map(post => (
-          <li key={post.uid} className="stack-24">
-            <div className="stack-8">
-              <h2>
-                <Link href={`/post/${post.uid}`}>
-                  <a className="link-as-text text-28">{post.data.title}</a>
-                </Link>
-              </h2>
-              <p className="text-18"> {post.data.subtitle}</p>
-            </div>
+    <>
+      <Header />
 
-            <dl className={styles.metadataStrip}>
-              <dt className="visually-hidden">Publicado:</dt>
-              <dd className={`text-14 ${styles.metadataContainer}`}>
-                <FiCalendar aria-hidden="true" size="20" />
-                {format(new Date(post.first_publication_date), 'd MMM yyyy', {
-                  locale: ptBR,
-                })}
-              </dd>
+      <main className="center inline-gutters-16 stack-64">
+        <ul className="stack-48">
+          {posts.map(post => (
+            <li key={post.uid} className="stack-24">
+              <div className="stack-8">
+                <h2>
+                  <Link href={`/post/${post.uid}`}>
+                    <a className="link-as-text text-28">{post.data.title}</a>
+                  </Link>
+                </h2>
+                <p className="text-18"> {post.data.subtitle}</p>
+              </div>
 
-              <dt className="visually-hidden">Autor:</dt>
-              <dd className={`text-14 ${styles.metadataContainer}`}>
-                <FiUser aria-hidden="true" size="20" />
-                {post.data.author}
-              </dd>
-            </dl>
-          </li>
-        ))}
-      </ul>
+              <dl className={styles.metadataStrip}>
+                <dt className="visually-hidden">Publicado:</dt>
+                <dd className={`text-14 ${styles.metadataContainer}`}>
+                  <FiCalendar aria-hidden="true" size="20" />
+                  {format(new Date(post.first_publication_date), 'd MMM yyyy', {
+                    locale: ptBR,
+                  })}
+                </dd>
 
-      {nextPage !== null ? (
-        <button
-          onClick={handleLoadMore}
-          type="button"
-          className="button-as-text text-18 text-semibold text-pink-6"
-        >
-          Carregar mais posts
-        </button>
-      ) : null}
-    </div>
+                <dt className="visually-hidden">Autor:</dt>
+                <dd className={`text-14 ${styles.metadataContainer}`}>
+                  <FiUser aria-hidden="true" size="20" />
+                  {post.data.author}
+                </dd>
+              </dl>
+            </li>
+          ))}
+        </ul>
+
+        {nextPage !== null ? (
+          <button
+            onClick={handleLoadMore}
+            type="button"
+            className="button-as-text text-18 text-semibold text-pink-6"
+          >
+            Carregar mais posts
+          </button>
+        ) : null}
+      </main>
+    </>
   );
 }
 
