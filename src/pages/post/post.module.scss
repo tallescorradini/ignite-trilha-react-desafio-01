@@ -1,1 +1,25 @@
-// TODO
+.banner {
+  position: relative;
+  width: 100%;
+  height: clamp(12.5rem, 30vw, 25rem);
+}
+
+.metadataStrip {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.metadataContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.postContent * + * {
+  margin-block-start: 2.5rem;
+}
+
+.postContent p + p {
+  margin-block-start: 1.5em;
+}

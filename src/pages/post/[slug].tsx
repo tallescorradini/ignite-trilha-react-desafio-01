@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { RichText } from 'prismic-dom';
+import { FiCalendar, FiUser, FiClock } from 'react-icons/fi';
 import Header from '../../components/Header';
 import { getPrismicClient } from '../../services/prismic';
 
@@ -19,7 +20,6 @@ interface Post {
     subtitle: string;
     banner: {
       url: string;
-      dimensions: { width: string; height: string };
     };
     author: string;
     content: {
@@ -86,42 +86,57 @@ export default function Post({ post }: PostProps): JSX.Element {
     <>
       <Header />
 
-      <main>
-        <article>
-          <h1>{post.data.title}</h1>
-          <dl>
-            <dt>Publicado em:</dt>
-            <dd>
-              {format(new Date(post.first_publication_date), 'dd MMM yyyy', {
-                locale: ptBR,
-              })}
-            </dd>
-
-            <dt>Autor(a):</dt>
-            <dd>{post.data.author}</dd>
-
-            <dt>Tempo de leitura:</dt>
-            <dd>{getEstimatedReadingTime(post.data.content)}</dd>
-          </dl>
-
+      <main className="stack-80 inline-gutters-16 bottom-gutter-80">
+        <div className={styles.banner}>
           <Image
             alt=""
             src={post.data.banner.url}
-            width={post.data.banner.dimensions.width}
-            height={post.data.banner.dimensions.height}
+            layout="fill"
+            objectFit="cover"
           />
+        </div>
 
-          {post.data.content.map(element => (
-            <div key={element.heading}>
-              <h2>{element.heading}</h2>
-              <div
-                // eslint-disable-next-line react/no-danger
-                dangerouslySetInnerHTML={{
-                  __html: RichText.asHtml(element.body),
-                }}
-              />
-            </div>
-          ))}
+        <article className="center stack-64">
+          <div className="stack-24">
+            <h1 className="text-48">{post.data.title}</h1>
+            <dl className={styles.metadataStrip}>
+              <dt className="visually-hidden">Publicado em:</dt>
+              <dd className={`text-14 ${styles.metadataContainer}`}>
+                <FiCalendar aria-hidden="true" size="20" />
+                {format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+                  locale: ptBR,
+                })}
+              </dd>
+
+              <dt className="visually-hidden">Autor(a):</dt>
+              <dd className={`text-14 ${styles.metadataContainer}`}>
+                <FiUser aria-hidden="true" size="20" />
+                {post.data.author}
+              </dd>
+
+              <dt className="visually-hidden">Tempo de leitura:</dt>
+              <dd className={`text-14 ${styles.metadataContainer}`}>
+                <FiClock aria-hidden="true" size="20" />
+                {getEstimatedReadingTime(post.data.content)}
+              </dd>
+            </dl>
+          </div>
+
+          <div className={styles.postContent}>
+            {post.data.content.map(element => (
+              <div key={element.heading}>
+                <h2 className={`text-36 ${styles.contentHeading}`}>
+                  {element.heading}
+                </h2>
+                <div
+                  // eslint-disable-next-line react/no-danger
+                  dangerouslySetInnerHTML={{
+                    __html: RichText.asHtml(element.body),
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </article>
       </main>
     </>
@@ -152,10 +167,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           author: data.author,
           banner: {
             url: data.banner.url,
-            dimensions: {
-              width: data.banner.dimensions.width,
-              height: data.banner.dimensions.height,
-            },
           },
           content: data.content,
           subtitle: data.subtitle,
