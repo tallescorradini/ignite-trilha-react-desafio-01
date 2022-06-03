@@ -86,7 +86,7 @@ export default function Post({ post }: PostProps): JSX.Element {
     <>
       <Header />
 
-      <main className="stack-80 inline-gutters-16 bottom-gutter-80">
+      <main className="stack-80 bottom-gutter-80">
         <div className={styles.banner}>
           <Image
             alt=""
@@ -96,7 +96,7 @@ export default function Post({ post }: PostProps): JSX.Element {
           />
         </div>
 
-        <article className="center stack-64">
+        <article className="center inline-gutters-16 stack-64">
           <div className="stack-24">
             <h1 className="text-48">{post.data.title}</h1>
             <dl className={styles.metadataStrip}>
